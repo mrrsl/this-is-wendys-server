@@ -1,7 +1,7 @@
 import { WebPubSubServiceClient } from "@azure/web-pubsub";
 import express from "express";
 
-import { WSManager } from "./lib/InstanceManager";
+import { WSManager } from "./lib/InstanceManager.js";
 
 const server = express();
 
