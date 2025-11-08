@@ -1,4 +1,4 @@
-const socketEndpoint = "wss://localhost:3000/ws?group=";
+const socketEndpoint = "ws://localhost:3000/ws?group=";
 //const socketEndpoint = "wss://this-is-wendys-socket-service-dkc8eyd7bzc9hndh.canadacentral-01.azurewebsites.net/ws?group=";
 const pairCode = "mygoat";
 /**
