@@ -7,9 +7,12 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "run": "node server.js",
     "test": "node server.js"
   },
   "dependencies": {
-    "ws": "^8.18.3"
+    "@azure/web-pubsub": "^1.2.0",
+    "@azure/web-pubsub-express": "^1.0.6",
+    "express": "^5.1.0"
   }
 }
