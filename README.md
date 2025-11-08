@@ -2,7 +2,7 @@
 ```js
     // Treat this like a pairing code
     let pairingCode = "dn";
-    let url = `ws://this-is-wendys-socket-service-dkc8eyd7bzc9hndh.canadacentral-01.azurewebsites.net/ws?pair=${pairingCode}`;
+    let url = `wss://this-is-wendys-socket-service-dkc8eyd7bzc9hndh.canadacentral-01.azurewebsites.net/ws?pair=${pairingCode}`;
 
     let socket = new WebSocket(url);
     socket.onopen = () => {

@@ -13,7 +13,9 @@
             const display = document.getElementById("display");
 
             let pairingCode = "timmies";
-            let url = `ws://localhost:3000/ws?group=${pairingCode}`;
+            let url = `wss://localhost:3000/ws?group=${pairingCode}`;
+            if (window.location.host != "localhost")
+                url = `wss://this-is-wendys-socket-service-dkc8eyd7bzc9hndh.canadacentral-01.azurewebsites.net/ws?pair=${pairingCode}`;
 
             let ws = new WebSocket(url);
 
@@ -28,7 +30,8 @@
             };
 
             ws.onmessage = ev => {
-                console.log("Received", ev.data);
+                let jstring = JSON.stringify(ev.data);
+                console.log("Received", jstring);
             }
 
             ws.onclose = ev => {
