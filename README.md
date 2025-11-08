@@ -1,4 +1,4 @@
-##### Creating the client websocket
+### Creating the client websocket
 ```js
     // Treat this like a pairing code
     let pairingCode = "dn";
@@ -16,14 +16,14 @@
     }
 
 ```
-##### Broadcasting data
+### Broadcasting data
 ```js
     socket.send({
         payload: "more shit posting", // Whatever you wanna send here
         type: null // Leaving it like this for now
     });
 ```
-#### Extracting data
+### Extracting data
 Data will be broadcast to sockets in the following format:
 ```ts
     {
