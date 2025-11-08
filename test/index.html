@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            #display {
+                width: 300px;
+                height: 200px;
+                color: white;
+                background-color: black;
+            }
+        </style>
+        <script type="module">
+            const display = document.getElementById("display");
+
+            let pairingCode = "timmies";
+            let url = `/negotiate?pair=${pairingCode}`;
+
+            display.textContent = `Using pairing code ${pairingCode}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then((token) => {
+                    var socket = new WebSocket(token.serverUrl);
+                    socket.onopen = (ev) => {
+                        debugger;
+                        socket.send({
+                            payload: "This is Patrick",
+                            type: "string"
+                        });
+                        display.textContent = "Sent Patrick";
+                    };
+                        
+                    socket.onmessage = (event) => {
+                        display.textContent = `Recieved message ${event.data.payload}`;
+                    }
+                });
+        </script>
+    </head>
+    <body>
+        <div id="display">
+
+        </div>
+    </body>
+</html>

@@ -7,6 +7,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
+    "demo": "(sleep 2 && firefox localhost:3000)& node server.js"
   },
   "dependencies": {
     "@azure/web-pubsub": "^1.2.0",

@@ -1,5 +1,6 @@
 import { WebPubSubServiceClient } from "@azure/web-pubsub";
 import express from "express";
+import path from "path";
 
 import { WSManager } from "./lib/InstanceManager.js";
 
@@ -9,30 +10,13 @@ const manager = new WSManager();
 
 /**
  * 
- * @param {WebPubSubServiceClient.Request} req 
- * @param {WebPubSubServiceClient.Response} res 
- */
-async function wsHandler(req, res) {
-    if (req.context.eventName === "message") {
-        await pubsubService.sendToAll({
-            from: req.context.userId,
-            message: req.data
-        });
-        res.success();
-    }
-}
-
-/**
- * 
  * @param {Express.Request} req 
  * @param {Express.Response} res 
  */
 async function negotiate(req, res) {
-    let pairNumber = req.query.pair;
+    let pairNumber = req.query["pair"];
     if (!pairNumber) {
         res.status(400).send("Need pairing code");
-    } else if (manager.clientCount > 19) {
-
     } else {
 
         let token = await manager.managedHub.getClientAccessToken({userId: `${Math.random()}-${pairNumber}`});
@@ -44,5 +28,8 @@ async function negotiate(req, res) {
 }
 
 server.get("/negotiate", negotiate);
+server.get("/", (req, res) => {
+    res.sendFile(path.resolve("./test/index.html"));
+});
 
 server.listen(process.env.PORT || 3000);
