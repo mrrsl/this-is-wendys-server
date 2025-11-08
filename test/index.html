@@ -13,27 +13,28 @@
             const display = document.getElementById("display");
 
             let pairingCode = "timmies";
-            let url = `/negotiate?pair=${pairingCode}`;
+            let url = `ws://localhost:3000/ws?group=${pairingCode}`;
 
-            display.textContent = `Using pairing code ${pairingCode}`;
+            let ws = new WebSocket(url);
 
-            fetch(url)
-                .then(res => res.json())
-                .then((token) => {
-                    var socket = new WebSocket(token.serverUrl);
-                    socket.onopen = (ev) => {
-                        debugger;
-                        socket.send({
-                            payload: "This is Patrick",
-                            type: "string"
-                        });
-                        display.textContent = "Sent Patrick";
-                    };
-                        
-                    socket.onmessage = (event) => {
-                        display.textContent = `Recieved message ${event.data.payload}`;
-                    }
+            ws.onopen = ev => {
+                display.textContent = "Connection Opened";
+                console.log("Opened connection");
+                ws.send({
+                    payload: "shitpost deez",
+                    type: "string"
                 });
+                console.log("Sent data");
+            };
+
+            ws.onmessage = ev => {
+                console.log("Received", ev.data);
+            }
+
+            ws.onclose = ev => {
+                console.log("Socket closed");
+            }
+
         </script>
     </head>
     <body>

@@ -10,8 +10,7 @@
     "demo": "(sleep 2 && firefox localhost:3000)& node server.js"
   },
   "dependencies": {
-    "@azure/web-pubsub": "^1.2.0",
-    "@azure/web-pubsub-express": "^1.0.6",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "ws": "^8.18.3"
   }
 }
