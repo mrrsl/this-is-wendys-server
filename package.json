@@ -7,8 +7,6 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "run": "node server.js",
-    "test": "node server.js"
   },
   "dependencies": {
     "@azure/web-pubsub": "^1.2.0",
