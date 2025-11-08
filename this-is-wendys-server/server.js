@@ -34,10 +34,10 @@ async function negotiate(req, res) {
     } else if (manager.clientCount > 19) {
 
     } else {
-        let desiredService = manager.getInstance(pairNumber);
-            new WebPubSubServiceClient(cstring, pairNumber);
-        let token = await desired.getClientAccessToken({pair: pairNumber, user: Math.random()});
+
+        let token = await manager.managedHub.getClientAccessToken({userId: `${Math.random()}-${pairNumber}`});
         res.json({
+            // This is what client fetches to construct the new Websocket with.
             serverUrl: token.url
         });
     }

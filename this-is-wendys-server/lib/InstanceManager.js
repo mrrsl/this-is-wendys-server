@@ -1,16 +1,24 @@
 import { WebPubSubServiceClient } from "@azure/web-pubsub";
-import { WebPubSubEventHandler } from "@azure/web-pubsub-express";
+import {
+    WebPubSubEventHandler,
+    ConnectedRequest,
+    DisconnectedRequest,
+    UserEventRequest,
+    UserEventResponse
+} from "@azure/web-pubsub-express";
 
 const ConnectionString  = "Endpoint=https://this-is-wendys-server.webpubsub.azure.com;AccessKey=4ZvFmmB6ToibLB8y67WFq0xjYIYKnrZx68gtqFBYSrBqeRGEttPXJQQJ99BKACBsN54XJ3w3AAAAAWPSYzxj;Version=1.0;";
+const HubName = "shitpost here ryan";
 
 /**
  * Handles user events on the socket. Intended to be passed through {@link Function.prototype.bind}.
- * @param {WebPubSubServiceClient.Request} req 
- * @param {WebPubSubServiceClient.Response} res 
+ * @param {WebPubSubServiceClient} wpsClient 
+ * @param {UserEventRequest} req 
+ * @param {UserEventResponse} res 
  */
-async function wsEventHandler(req, res) {
+async function wsEventHandler(wpsClient, req, res) {
     if (req.context.eventName === "share") {
-        await this.sendToAll({
+        await wpsClient.sendToAll({
             from: req.context.id,
             message: req.data
         });
@@ -19,40 +27,67 @@ async function wsEventHandler(req, res) {
 }
 
 /**
+ * Handle managing connection counts. Use through {@link Function.prototype.bind}.
+ * @param {WSManager} man Manager instance.
+ * @param {DisconnectedRequest} dcReq
+ */
+function disconnectHandler(man, dcReq) {
+    man.clientCount--;
+}
+
+/**
+ * 
+ * @param {WebPubSubServiceClient} wpsClient 
+ * @param {ConnectedRequest} cReq 
+ */
+function connectHandler(wpsClient, cReq) {
+    let id = cReq.context.userId
+}
+
+/**
  * Manages Azure WPS hubs
  */
 export const WSManager = class {
     /**
-     * @type {{[key:Number]: WebPubSubServiceClient}}
+     * @type {WebPubSubServiceClient}
      */
-    activeHubs;
+    managedHub;
 
     /**
-     * @type {{[key: Number]: WebPubSubEventHandler}}
+     * @type {WebPubSubEventHandler}
      */
-    activeListeners;
+    handlerRef;
+
     /** Number of connected clients. */
     clientCount;
 
+    /**
+     * User id map of the groups they belong to.
+     * @type {{[key: string]: string}}
+     */
+    clientList = {}
+
     constructor() {
-        this.activeHubs = {};
-        this.activeListeners = {};
+        this.activeGroups = {};
         this.clientCount = 0;
+        this.managedHub = new WebPubSubServiceClient(ConnectionString, HubName);
+
+        this.handlerRef = new WebPubSubEventHandler(HubName, {
+            handleUserEvent: wsEventHandler.bind(this, this.managedHub),
+            onConnected: connectHandler.bind(this, this.managedHub),
+            onDisconnected: disconnectHandler.bind(null, this)
+        });
     }
 
     getInstance(pair) {
-        if (this.activeHubs[pair])
-            return this.activeHubs[pair];
-        
-        this.activeHubs[pair] = new WebPubSubServiceClient(
-            ConnectionString,
-            pair
-        );
+        if (this.managedHub.groupExists(pair)) {
+            return this.managedHub.group(pair);
+        }
+        return null;
+    }
 
-        this.activeListeners[pair] = new WebPubSubEventHandler({
-            
-        });
+    /** */
+    expectUser(id, groupName) {
 
-        return this.activeHubs[pair];
     }
 }
