@@ -1,0 +1,28 @@
+:root {
+    --console-width: 500px;
+}
+#display {
+    background-color: black;
+    color: white;
+    width: var(--console-width);
+    height: 400px;
+
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+}
+#display > p {
+    color: inherit;
+    font-family: monospace;
+}
+#inputter {
+    display: flex;
+    flex-direction: row;
+    width: var(--console-width);
+}
+#inputter > input {
+    width: max-content;
+}
+#inputter > button {
+    width: 10%;
+}
