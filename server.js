@@ -5,6 +5,7 @@ import { SocketManager } from "./lib/WSInstance.js";
 
 const server = express();
 
+// For getting local assets for demo runs
 server.use(express.static(path.resolve("./test")));
 server.get("/", (req, res) => {
     res.sendFile(path.resolve("./test/preview.html"));

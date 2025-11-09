@@ -43,7 +43,9 @@ function init(event) {
 
     output.attachedWs = createConnection(pairCode,
         (msg) => {
-            sendLine(msg.data);
+            debugger;
+            let dataObj = JSON.parse(msg.data);
+            sendLine("Recieved " + dataObj.data);
         },
         (close) => {
             sendLine("Connection closed");
@@ -54,8 +56,8 @@ function init(event) {
     );
 
     enter.addEventListener("click", (event) => {
-        debugger;
-        output.attachedWs.send(input.value);
+        let payload = JSON.stringify({data: input.value, type: "text/plain"});
+        output.attachedWs.send(payload);
         sendLine(`Message sent ${input.value}`);
         input.value = "";
     });
