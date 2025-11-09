@@ -1,4 +1,4 @@
-const socketEndpoint = "ws://localhost:3000/ws?group=";
+const socketEndpoint = "ws://localhost:3000/ws";
 //const socketEndpoint = "wss://this-is-wendys-socket-service-dkc8eyd7bzc9hndh.canadacentral-01.azurewebsites.net/ws?group=";
 const pairCode = "mygoat";
 /**
@@ -9,7 +9,7 @@ const pairCode = "mygoat";
  * @param {(CloseEvent) => void} onclose
  */
 function createConnection(pairingCode, onmessage, onclose, onopen) {
-    let socket = new WebSocket(socketEndpoint + pairCode);
+    let socket = new WebSocket(socketEndpoint);
     onmessage && socket.addEventListener("message", onmessage);
     onclose && socket.addEventListener("close", onclose);
     onopen && socket.addEventListener("open", onopen);
@@ -43,9 +43,7 @@ function init(event) {
 
     output.attachedWs = createConnection(pairCode,
         (msg) => {
-            debugger;
-            let dataObj = JSON.parse(msg.data);
-            sendLine("Recieved " + dataObj.data);
+            sendLine("Recieved " + msg.data);
         },
         (close) => {
             sendLine("Connection closed");
